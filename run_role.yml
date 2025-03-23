@@ -2,7 +2,7 @@
 - name: "Run Role"
   hosts: all
   become: true
-  gather_facts: false
+  gather_facts: true
 
   tasks:
 

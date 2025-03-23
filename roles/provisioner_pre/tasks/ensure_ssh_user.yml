@@ -12,20 +12,36 @@
   connection: local
   ansible.builtin.command: 'ssh-keygen -t {{ ssh_key_cipher }} -f {{ ssh_key_file_path }} -q -N ""'
   become: false
-  
-- name: "Ensure passwordless ssh to host"
-  connection: local
-  ansible.builtin.shell: "cat {{ ssh_public_key_path }} >> ~/.ssh/authorized_keys"
+  register: ssh_key_gen_result
+  changed_when: ssh_key_gen_result.rc == 0
+
+- name: "Copy the private key to the provisioner node"
+  ansible.builtin.copy:
+    src: "{{ ssh_key_file_path }}"
+    dest: "{{ ssh_key_file_path }}"
+    mode: "0700"
   become: false
-  
+
+- name: "Copy the public key to the provisioner node"
+  ansible.builtin.copy:
+    src: "{{ ssh_public_key_path }}"
+    dest: "{{ ssh_public_key_path }}"
+    mode: "0744"
+  become: false
+
+- name: "Ensure passwordless ssh to host"
+  ansible.builtin.command: "ssh-copy-id -i {{ ssh_public_key_path }} {{ ansible_fqdn }}"
+  become: false
+  register: authorized_key_result
+  changed_when: authorized_key_result.rc == 0
+
 - name: "Test the connection"
-  ansible.builtin.command: "ssh -o StrictHostKeyChecking=no localhost 'echo Killroy_was_here'"
+  ansible.builtin.command: "ssh {{ ansible_fqdn }} 'echo Killroy_was_here'"
   register: result
   changed_when: result.rc == 0
   become: false
-  
+
 - name: "Assert we were there"
   ansible.builtin.assert:
     that: result.stdout == "Killroy_was_here"
   become: false
-  

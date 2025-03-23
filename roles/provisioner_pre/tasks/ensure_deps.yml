@@ -1,7 +1,11 @@
 ---
 
+- name: "Register to the CDN"
+  community.general.redhat_subscription:
+    org_id: "{{ cdn_organization_vault }}"
+    activationkey: "{{ cdn_activation_key_vault }}"
+
 - name: "Install rhis rpm dependencies"
   ansible.builtin.package:
     name: "{{ rpm_dep_list }}"
     state: present
-

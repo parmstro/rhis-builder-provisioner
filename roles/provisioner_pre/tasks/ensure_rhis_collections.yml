@@ -1,7 +1,78 @@
 ---
 
+- name: "Make sure the remote directory exists on the provisioner node."
+  ansible.builtin.file:
+    path: "~/rhis"
+    state: directory
+    mode: "0744"
+  become: false
+
+- name: "Copy the requirements file to the provisioner server"
+  ansible.builtin.copy:
+    src: "requirements.yml"
+    dest: "~/rhis/"
+    mode: "0744"
+  become: false
+
+- name: "Create the ansible configuration on the provisioner system"
+  ansible.builtin.command: "ansible-config init"
+  register: ansible_config_init_result
+  changed_when: ansible_config_init_result.rc == 0
+
+- name: "Set the ansible galaxy configuration"
+  community.general.ini_file:
+    path: "/etc/ansible/ansible.cfg"
+    section: "galaxy"
+    option: "server_list"
+    value: "{{ ansible_galaxy_server_list | map(attribute='name') | join(',') }}"
+    mode: "0644"
+
+- name: "Set the ansible galaxy server url configurations"
+  community.general.ini_file:
+    path: "/etc/ansible/ansible.cfg"
+    section: "galaxy_server.{{ galaxy_server.name }}"
+    option: "url"
+    value: "{{ galaxy_server.url }}"
+    mode: "0644"
+  loop: "{{ ansible_galaxy_server_list }}"
+  loop_control:
+    loop_var: galaxy_server
+  no_log: true
+
+- name: "Set the ansible galaxy server auth_url configurations"
+  when: galaxy_server.auth_url is defined
+  community.general.ini_file:
+    path: "/etc/ansible/ansible.cfg"
+    section: "galaxy_server.{{ galaxy_server.name }}"
+    option: "auth_url"
+    value: "{{ galaxy_server.auth_url }}"
+    mode: "0644"
+  loop: "{{ ansible_galaxy_server_list }}"
+  loop_control:
+    loop_var: galaxy_server
+  no_log: true
+
+- name: "Set the ansible galaxy server token configurations"
+  when: galaxy_server.token is defined
+  community.general.ini_file:
+    path: "/etc/ansible/ansible.cfg"
+    section: "galaxy_server.{{ galaxy_server.name }}"
+    option: "token"
+    value: "{{ galaxy_server.token }}"
+    mode: "0644"
+  loop: "{{ ansible_galaxy_server_list }}"
+  loop_control:
+    loop_var: galaxy_server
+  no_log: true
+
 - name: "Ensure that the rhis collections are installed for our user"
-  ansible.builtin.command: "ansible-galaxy collection install -r {{ playbook_dir }}/requirements.yml"
+  ansible.builtin.command: "ansible-galaxy collection install -r ~/rhis/requirements.yml"
+  become: false
+  register: collection_install
+  changed_when: collection_install.rc == 0
 
 - name: "Ensure that the rhis roles are installed for our user"
-  ansible.builtin.command: "ansible-galaxy role install -r {{ playbook_dir }}/requirements.yml"
+  ansible.builtin.command: "ansible-galaxy role install -r ~/rhis/requirements.yml"
+  become: false
+  register: role_install
+  changed_when: role_install.rc == 0

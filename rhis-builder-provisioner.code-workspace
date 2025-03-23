@@ -3,5 +3,8 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"settings": {
+		"ansible.python.interpreterPath": "/bin/python3.11"
+	}
 }
