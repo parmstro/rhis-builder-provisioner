@@ -1,0 +1,7 @@
+---
+
+- name: "Install rhis rpm dependencies"
+  ansible.builtin.package:
+    name: "{{ rpm_dep_list }}"
+    state: present
+

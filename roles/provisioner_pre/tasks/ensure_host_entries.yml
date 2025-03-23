@@ -1,0 +1,13 @@
+---
+
+- name: "Add idm and satellite host entries to /etc/hosts"
+  ansible.builtin.lineinfile:
+    path: "/etc/hosts"
+    search_string: "{{ environment_host.ip }}"
+    line: "{{ environment_host.ip }}      {{ environment_host.name }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop: "{{ environment_hosts }}"
+  loop_control:
+    loop_var: environment_host

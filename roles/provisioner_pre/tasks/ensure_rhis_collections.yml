@@ -1,0 +1,7 @@
+---
+
+- name: "Ensure that the rhis collections are installed for our user"
+  ansible.builtin.command: "ansible-galaxy collection install -r {{ playbook_dir }}/requirements.yml"
+
+- name: "Ensure that the rhis roles are installed for our user"
+  ansible.builtin.command: "ansible-galaxy role install -r {{ playbook_dir }}/requirements.yml"

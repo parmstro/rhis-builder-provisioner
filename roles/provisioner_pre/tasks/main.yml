@@ -1,0 +1,23 @@
+---
+
+# Configure the prerequisites for the provisioner
+- name: "Ensure ssh key"
+  ansible.builtin.include_tasks: "ensure_ssh_user.yml"
+
+- name: "Ensure rpm dependencies"
+  ansible.builtin.include_tasks: "ensure_deps.yml"
+
+- name: "Ensure galaxy configruation"
+  ansible.builtin.include_tasks: "ensure_galaxy_config.yml"
+
+- name: "Ensure collections for rhis-builder family"
+  ansible.builtin.include_tasks: "ensure_rhis_collections.yml"
+
+- name: "Ensure rhis-builder git repositories"
+  ansible.builtin.include_tasks: "ensure_rhis_repos.yml"
+  
+- name: "Create bootstrap hosts name resolution entries"
+  ansible.builtin.include_tasks: "ensure_host_entries.yml"
+
+
+

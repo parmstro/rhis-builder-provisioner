@@ -1,0 +1,56 @@
+---
+
+environment_hosts:
+  - name: "provisioner.example.ca"
+    ip: "192.168.140.13"
+  - name: "idm.example.ca"
+    ip: "192.168.140.5"
+  - name: "satellite.example.ca"
+    ip: "192.168.140.12"
+  - name: "vcenter.example.ca"
+    ip: "192.168.140.30"
+  - name: "c3esx2.example.ca"
+    ip: "192.168.140.32"
+  - name: "c3esx3.example.ca"
+    ip: "192.168.140.33"
+  - name: "c3esx4.example.ca"
+    ip: "192.168.140.34"
+  - name: "c3esx5.example.ca"
+    ip: "192.168.140.35"
+  - name: "c3esx6.example.ca"
+    ip: "192.168.140.36"
+
+ssh_key_cipher: "ed25519"
+ssh_key_file_path: "~/.ssh/id_ed25519"
+ssh_public_key_path: "~/.ssh/id_ed25519.pub"
+
+rhah_url: "https://cloud.redhat.com/api/automation-hub/"
+
+rpm_dep_list:
+  - ansible-core
+  - git
+  - vim
+  - rhel-system-roles
+  - python3
+
+rhis_repo_path: "~/rhis"
+rhis_git_repos:
+  - name: "rhis-builder-idm"
+    url: "https://github.com/parmstro/rhis-builder-idm.git"
+  - name: "rhis-builder-satellite"
+    url: "https://github.com/parmstro/rhis-builder-satellite.git"
+  - name: "rhis-builder-aap"
+    url: "https://github.com/parmstro/rhis-builder-aap.git"
+  - name: "rhis-builder-pipelines"
+    url: "https://github.com/parmstro/rhis-builder-pipelines.git"
+  - name: "rhis-builder-nbde"
+    url: "https://github.com/parmstro/rhis-builder-nbde.git"
+  - name: "rhis-builder-day-2-ops"
+    url: "https://github.com/parmstro/rhis-builder-day-2-ops.git"
+  - name: "rhis-builder-ansible-ee"
+    url: "https://github.com/parmstro/rhis-builder-ansible-ee.git"
+  - name: "rhis-builder-imagebuilder"
+    url: "https://github.com/parmstro/rhis-builder-imagebuilder.git"
+  
+
+

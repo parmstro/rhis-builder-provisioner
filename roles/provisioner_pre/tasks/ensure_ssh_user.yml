@@ -1,0 +1,31 @@
+---
+
+- name: "Examine the public key path"
+  connection: local
+  ansible.builtin.stat:
+    path: "{{ ssh_public_key_path }}"
+  register: stat_result
+  become: false
+
+- name: "Ensure the key exists"
+  when: not stat_result.stat.exists
+  connection: local
+  ansible.builtin.command: 'ssh-keygen -t {{ ssh_key_cipher }} -f {{ ssh_key_file_path }} -q -N ""'
+  become: false
+  
+- name: "Ensure passwordless ssh to host"
+  connection: local
+  ansible.builtin.shell: "cat {{ ssh_public_key_path }} >> ~/.ssh/authorized_keys"
+  become: false
+  
+- name: "Test the connection"
+  ansible.builtin.command: "ssh -o StrictHostKeyChecking=no localhost 'echo Killroy_was_here'"
+  register: result
+  changed_when: result.rc == 0
+  become: false
+  
+- name: "Assert we were there"
+  ansible.builtin.assert:
+    that: result.stdout == "Killroy_was_here"
+  become: false
+  

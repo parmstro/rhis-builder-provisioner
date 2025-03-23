@@ -1,0 +1,17 @@
+---
+
+- name: "Get the list of galaxy server entries"
+  ansible.builtin.set_fact:
+    server_list: "{{ lookup('ansible.builtin.ini', 'server_list', section='galaxy', file='/etc/ansible/ansible.cfg') | split(',') }}"
+
+- name: "Get the list of urls for the entries"
+  ansible.builtin.set_fact:
+    urls: "{{ urls | default([]) + [lookup('ansible.builtin.ini', 'url', section='galaxy_server.'+section_name, file='/etc/ansible/ansible.cfg')] }}"
+  loop: "{{ server_list }}"
+  loop_control:
+    loop_var: section_name
+
+- name: "Assert that the automation hub url is in the list"
+  ansible.builtin.assert:
+    that: rhah_url in urls
+    fail_msg: "Could not find automation hub url. Please check ansible.cfg"
