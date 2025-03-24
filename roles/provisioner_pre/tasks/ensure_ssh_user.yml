@@ -15,6 +15,13 @@
   register: ssh_key_gen_result
   changed_when: ssh_key_gen_result.rc == 0
 
+- name: "Ensure the remote directory exists"
+  ansible.builtin.file:
+    path: "~/.ssh"
+    state: "directory"
+    mode: "0700"
+  become: false
+
 - name: "Copy the private key to the provisioner node"
   ansible.builtin.copy:
     src: "{{ ssh_key_file_path }}"
@@ -30,7 +37,7 @@
   become: false
 
 - name: "Ensure passwordless ssh to host"
-  ansible.builtin.command: "ssh-copy-id -i {{ ssh_public_key_path }} {{ ansible_fqdn }}"
+  ansible.builtin.shell: "cat {{ ssh_public_key_path }} > ~/.ssh/authorized_keys"
   become: false
   register: authorized_key_result
   changed_when: authorized_key_result.rc == 0
