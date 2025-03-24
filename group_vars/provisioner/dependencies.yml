@@ -41,21 +41,29 @@ ansible_galaxy_server_list:
     auth_url: "https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token"
     token: "{{ redhat_automation_hub_token_vault }}"
 
-rhis_repo_path: "~/rhis"
+rhis_repo_path: "~/rhis/"
 rhis_git_repos:
   - name: "rhis-builder-idm"
     url: "https://github.com/parmstro/rhis-builder-idm.git"
+    force: true
   - name: "rhis-builder-satellite"
     url: "https://github.com/parmstro/rhis-builder-satellite.git"
+    force: true
   - name: "rhis-builder-aap"
     url: "https://github.com/parmstro/rhis-builder-aap.git"
+    force: true
   - name: "rhis-builder-pipelines"
     url: "https://github.com/parmstro/rhis-builder-pipelines.git"
+    force: true
   - name: "rhis-builder-nbde"
     url: "https://github.com/parmstro/rhis-builder-nbde.git"
+    force: true
   - name: "rhis-builder-day-2-ops"
     url: "https://github.com/parmstro/rhis-builder-day-2-ops.git"
+    force: true
   - name: "rhis-builder-ansible-ee"
     url: "https://github.com/parmstro/rhis-builder-ansible-ee.git"
+    force: true
   - name: "rhis-builder-imagebuilder"
     url: "https://github.com/parmstro/rhis-builder-imagebuilder.git"
+    force: true

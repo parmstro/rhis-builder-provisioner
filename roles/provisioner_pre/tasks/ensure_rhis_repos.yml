@@ -3,7 +3,7 @@
 - name: "Clone the rhis github repositories"
   ansible.builtin.git:
     repo: "{{ repo.url }}"
-    dest: "{{ rhis_repo_path }}"
+    dest: "{{ rhis_repo_path }}{{ repo.name }}"
     clone: "{{ repo.clone | default(omit) }}"
     force: "{{ repo.force | default(omit) }}"
     track_submodules: "{{ repo.track_submodules | default(omit) }}"
@@ -11,3 +11,4 @@
   loop: "{{ rhis_git_repos }}"
   loop_control:
     loop_var: repo
+  become: false
