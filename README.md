@@ -1,5 +1,11 @@
 # rhis-builder-provisioner
 
+Fork it. Clone it. Configure it. Test it. Change it. Commit it. Create a PR.
+
+Rinse. Repeat.
+
+***
+
 This repository contains the code that configures the host that will provision an rhis infrastructure. 
 There are really two ways to approach provisioning the rhis environment. 
 1) Create a workstation, or other node, that has ansible core and the related collections necessary to run our projects. (Like deploying Openshift)
