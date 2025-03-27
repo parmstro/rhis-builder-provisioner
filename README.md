@@ -2,8 +2,6 @@
 
 Fork it. Clone it. Configure it. Test it. Change it. Commit it. Create a PR.
 
-Rinse. Repeat.
-
 ***
 
 This repository contains the code that configures the host that will provision an rhis infrastructure. 
