@@ -6,7 +6,7 @@
 
 - name: "Get the list of urls for the entries"
   ansible.builtin.set_fact:
-    urls: "{{ urls | default([]) + [lookup('ansible.builtin.ini', 'url', section='galaxy_server.'+section_name, file='/etc/ansible/ansible.cfg')] }}"
+    urls: "{{ urls | default([]) + [lookup('ansible.builtin.ini', 'url', section='galaxy_server.' + section_name, file='/etc/ansible/ansible.cfg')] }}"
   loop: "{{ server_list }}"
   loop_control:
     loop_var: section_name

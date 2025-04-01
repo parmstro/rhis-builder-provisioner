@@ -15,9 +15,6 @@
 
 - name: "Ensure rhis-builder git repositories"
   ansible.builtin.include_tasks: "ensure_rhis_repos.yml"
-  
+
 - name: "Create bootstrap hosts name resolution entries"
   ansible.builtin.include_tasks: "ensure_host_entries.yml"
-
-
-
