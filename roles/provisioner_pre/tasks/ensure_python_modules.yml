@@ -1,7 +1,0 @@
----
-
-# Currently python modules are installed via dnf
-# having these RHEL maintained at this time is preferred
-- name: "Python Requirements"
-  ansible.builtin.debug:
-    msg: "NOTE: Python modules should be installed with dnf. See dependencies.yml"

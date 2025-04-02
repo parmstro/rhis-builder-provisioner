@@ -36,7 +36,11 @@ rpm_dep_list:
   - rhel-system-roles
   - python3
   - python3-ipalib
+  - python3-pip
   - bind-utils
+
+rhis_provisioner_python_modules:
+  - ansible-lint
 
 ansible_galaxy_server_list:
   - name: "galaxy_root"

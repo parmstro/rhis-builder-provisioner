@@ -1,11 +1,10 @@
 ---
 
-- name: "Ensure that the necessary python modules are installed"
-  ansible.builtin.dnf:
-    name: "python3-pip"
-    state: "present"
-
 - name: "Ensure ansible-lint is available"
-  ansible.builtin.command: "pip3 install ansible-lint"
+  when: rhis_provisioner_python_modules is defined and (rhis_provisioner_python_modules | length) > 0
+  ansible.builtin.command: "pip3 install {{ module }}"
+  loop: "{{ rhis_provisioner_python_modules }}"
+  loop_control:
+    loop_var: module
   register: lint_install_result
   changed_when: lint_install_result.rc == 0

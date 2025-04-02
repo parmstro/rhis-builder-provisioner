@@ -16,6 +16,13 @@
 - name: "Ensure rhis-builder git repositories"
   ansible.builtin.include_tasks: "ensure_rhis_repos.yml"
 
+- name: "Ensure rhis-builder python requirements"
+  ansible.builtin.include_tasks: "ensure_python_requirements.yml"
+
+- name: "Copy vault files to remote if necessary"
+  when: vault_files_list is defined and (vault_files_list | length) > 0
+  ansible.builtin.include_tasks: "ensure_python_requirements.yml"
+
 - name: "Create bootstrap hosts name resolution entries"
   ansible.builtin.include_tasks: "ensure_host_entries.yml"
 
