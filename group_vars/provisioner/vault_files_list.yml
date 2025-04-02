@@ -1,0 +1,15 @@
+---
+
+# If you don't specify remote_user in Ansible playbook or inventory
+# ansible relies on ssh to make the connection, so the only way to know username
+# is to parse ssh config files or specify it here - which is way simpler for a one shot
+
+rhis_user: "ansiblerunner"
+
+vault_files_list:
+  - ~/vault/rhis_builder_vault.yml
+  - ~/vault/rhis_builder_idm_vault.yml
+#  - ~/vault/rhis_builder_aap_vault.yml
+#  - ~/vault/rhis_builder_nbde_vault.yml
+#  - ~/vault/rhis_builder_pipelines_vault.yml
+#  - ~/vault/rhis_builder_yubikey_vault.yml

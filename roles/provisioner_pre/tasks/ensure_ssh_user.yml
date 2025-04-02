@@ -43,7 +43,7 @@
   changed_when: authorized_key_result.rc == 0
 
 - name: "Test the connection"
-  ansible.builtin.command: "ssh {{ ansible_fqdn }} 'echo Killroy_was_here'"
+  ansible.builtin.command: "ssh {{ ansible_fqdn }} -o StrictHostKeyChecking=accept-new 'echo Killroy_was_here'"
   register: result
   changed_when: result.rc == 0
   become: false
