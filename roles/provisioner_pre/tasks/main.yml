@@ -28,3 +28,6 @@
 
 - name: "Copy local vault files to remote"
   ansible.builtin.include_tasks: "ensure_vault_files.yml"
+
+- name: "Ensure git configuration on remote"
+  ansible.builtin.include_tasks: "ensure_git_config.yml"

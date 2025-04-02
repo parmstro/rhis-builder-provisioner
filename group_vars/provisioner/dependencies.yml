@@ -3,6 +3,14 @@
 cdn_organization: "{{ cdn_organization_vault }}"
 cdn_activation_key: "{{ cdn_activation_key_vault }}"
 
+git_configs:
+  - name: "user.name"
+    scope: "global"
+    value: "parmstro@redhat.com"
+  - name: "user.email"
+    scope: "global"
+    value: "parmstro@redhat.com"
+
 environment_hosts:
   - name: "provisioner.example.ca"
     ip: "192.168.140.13"
