@@ -4,6 +4,8 @@
 # Lets copy the file locally to a temporary location and use lookup.
 # If it looks good proceed, if not warn the user to check the provisioner.
 
+# BugHunterCredit: Ben Blasco
+
 - name: "Ensure there is no local evaluation file"
   connection: local
   ansible.builtin.file:
