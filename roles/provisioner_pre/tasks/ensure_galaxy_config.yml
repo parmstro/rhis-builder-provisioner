@@ -1,12 +1,28 @@
 ---
 
+# Parsing the remote ini file is a pain.
+# Lets copy the file locally to a temporary location and use lookup.
+# If it looks good proceed, if not warn the user to check the provisioner.
+
+- name: "Ensure there is no local evaluation file"
+  connection: local
+  ansible.builtin.file:
+    path: "~/rhis-evaluate-ansible.cfg"
+    state: "absent"
+
+- name: "Fetch the remote ansible config to evaluate it."
+  ansible.builtin.fetch:
+    src: "/etc/ansible/ansible.cfg"
+    dest: "~/rhis-evaluate-ansible.cfg"
+    flat: true
+
 - name: "Get the list of galaxy server entries"
   ansible.builtin.set_fact:
-    server_list: "{{ lookup('ansible.builtin.ini', 'server_list', section='galaxy', file='/etc/ansible/ansible.cfg') | split(',') }}"
+    server_list: "{{ lookup('ansible.builtin.ini', 'server_list', section='galaxy', file='~/rhis-evaluate-ansible.cfg') | split(',') }}"
 
 - name: "Get the list of urls for the entries"
   ansible.builtin.set_fact:
-    urls: "{{ urls | default([]) + [lookup('ansible.builtin.ini', 'url', section='galaxy_server.' + section_name, file='/etc/ansible/ansible.cfg')] }}"
+    urls: "{{ urls | default([]) + [lookup('ansible.builtin.ini', 'url', section='galaxy_server.' + section_name, file='~/rhis-evaluate-ansible.cfg')] }}"
   loop: "{{ server_list }}"
   loop_control:
     loop_var: section_name
@@ -14,4 +30,10 @@
 - name: "Assert that the automation hub url is in the list"
   ansible.builtin.assert:
     that: rhah_url in urls
-    fail_msg: "Could not find automation hub url. Please check ansible.cfg"
+    fail_msg: "Could not find automation hub url. Please check ansible.cfg on the remote machine. (localfile: ~/rhis-evaluate-ansible-cfg/ansible.cfg)"
+
+- name: "Clean up"
+  connection: local
+  ansible.builtin.file:
+    path: "~/rhis-evaluate-ansible.cfg"
+    state: "absent"
