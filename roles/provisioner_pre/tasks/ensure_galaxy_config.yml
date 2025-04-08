@@ -20,7 +20,7 @@
 
 - name: "Get the list of galaxy server entries"
   ansible.builtin.set_fact:
-    server_list: "{{ lookup('ansible.builtin.ini', 'server_list', section='galaxy', file='~/rhis-evaluate-ansible.cfg') | split(',') }}"
+    server_list: "{{ lookup('ansible.builtin.ini', 'server_list', section='galaxy', file='~/rhis-evaluate-ansible.cfg') | split(',') | trim }}"
 
 - name: "Get the list of urls for the entries"
   ansible.builtin.set_fact:
