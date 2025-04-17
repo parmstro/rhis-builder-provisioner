@@ -1,0 +1,33 @@
+---
+
+- name: "Run provisioner_pre Role"
+  hosts: provisioner
+  become: true
+  gather_facts: true
+
+  tasks:
+
+    - name: "Load the vault variables"
+      when: vault_path is defined
+      ansible.builtin.include_vars:
+        file: "{{ vault_path }}"
+
+    - name: "Load the other variables"
+      when: vars_path is defined
+      ansible.builtin.include_vars:
+        file: "{{ vars_path }}"
+
+    - name: "Load the vault variables"
+      when: vault_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vault_dir }}"
+
+    - name: "Load the other variables"
+      when: vars_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vars_dir }}"
+
+
+    - name: "Apply role provisioner_pre"
+      ansible.builtin.include_role:
+        name: "provisioner_pre"
