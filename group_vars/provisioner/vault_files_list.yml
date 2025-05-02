@@ -12,7 +12,7 @@ rhis_user: "ansiblerunner"   # required if using vault_files_list
 
 vault_files_list:
   - ~/vault/rhis_builder_vault.yml
-  - ~/vault/rhis_builder_idm_vault.yml
+#  - ~/vault/rhis_builder_idm_vault.yml
 #  - ~/vault/rhis_builder_aap_vault.yml
 #  - ~/vault/rhis_builder_nbde_vault.yml
 #  - ~/vault/rhis_builder_pipelines_vault.yml
