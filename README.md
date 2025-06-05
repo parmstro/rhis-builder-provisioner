@@ -9,6 +9,7 @@ I know that most of you have experience with these things, but we also work with
 
 If you haven't been there yet, please visit the [rhis-builder-provisioner wiki](https://github.com/parmstro/rhis-builder-provisioner/wiki) first
 
+See rhis-builder-vault-SAMPLE repo for secrets definitions.
 ***
 This repository contains the code that configures the host that will provision an rhis infrastructure. 
 There are really two ways to approach provisioning the rhis environment. 
