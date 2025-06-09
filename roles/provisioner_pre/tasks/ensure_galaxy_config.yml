@@ -6,6 +6,10 @@
 
 # BugHunterCredit: Ben Blasco
 
+# Need to determine whether we are running on the provisioner or the users laptop
+# if on the provisioner, run local
+# if on your laptop, do not run local
+
 - name: "Ensure there is no local evaluation file"
   connection: local
   ansible.builtin.file:
@@ -18,6 +22,7 @@
     dest: "~/rhis-evaluate-ansible.cfg"
     flat: true
 
+# Lookup always evaluates on the machine where playbook execution is launched
 - name: "Get the list of galaxy server entries"
   ansible.builtin.set_fact:
     server_list: "{{ lookup('ansible.builtin.ini', 'server_list', section='galaxy', file='~/rhis-evaluate-ansible.cfg') | split(',') | trim }}"
