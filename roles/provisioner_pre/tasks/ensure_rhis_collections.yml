@@ -65,6 +65,12 @@
     loop_var: galaxy_server
   no_log: true
 
+- name: "Ensure the automation hub token is refreshed."
+  when: automation_hub_token_refresh_cmd_vault is defined
+  ansible.builtin.command: "{{ automation_hub_token_refresh_cmd_vault }}"
+  register: refresh_token_result
+  changed_when: refresh_token_result.rc == 0
+
 - name: "Ensure that the rhis collections are installed for our user"
   ansible.builtin.command: "ansible-galaxy collection install -r ~/rhis/requirements.yml"
   become: false

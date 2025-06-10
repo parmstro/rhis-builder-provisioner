@@ -1,6 +1,6 @@
 ---
 
-- name: "Ensure required python modules is available"
+- name: "Ensure required python modules are available"
   when: rhis_provisioner_python_modules is defined and (rhis_provisioner_python_modules | length) > 0
   ansible.builtin.command: "pip3 install {{ module }}"
   loop: "{{ rhis_provisioner_python_modules }}"

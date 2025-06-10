@@ -2,6 +2,8 @@
 
 cdn_organization: "{{ cdn_organization_vault }}"
 cdn_activation_key: "{{ cdn_activation_key_vault }}"
+# Base network info
+_default_domain: "example.ca"
 
 git_configs:
   - name: "user.name"
@@ -12,23 +14,23 @@ git_configs:
     value: "parmstro@redhat.com"
 
 environment_hosts:
-  - name: "provisioner.example.ca"
+  - name: "provisioner.{{ _default_domain }}"
     ip: "192.168.140.13"
-  - name: "idm.example.ca"
+  - name: "idm.{{ _default_domain }}"
     ip: "192.168.140.5"
-  - name: "satellite.example.ca"
+  - name: "satellite.{{ _default_domain }}"
     ip: "192.168.140.12"
-  - name: "vcenter.example.ca"
+  - name: "vcenter.{{ _default_domain }}"
     ip: "192.168.140.30"
-  - name: "c3esx2.example.ca"
+  - name: "c3esx2.{{ _default_domain }}"
     ip: "192.168.140.32"
-  - name: "c3esx3.example.ca"
+  - name: "c3esx3.{{ _default_domain }}"
     ip: "192.168.140.33"
-  - name: "c3esx4.example.ca"
+  - name: "c3esx4.{{ _default_domain }}"
     ip: "192.168.140.34"
-  - name: "c3esx5.example.ca"
+  - name: "c3esx5.{{ _default_domain }}"
     ip: "192.168.140.35"
-  - name: "c3esx6.example.ca"
+  - name: "c3esx6.{{ _default_domain }}"
     ip: "192.168.140.36"
 
 ssh_key_cipher: "ed25519"

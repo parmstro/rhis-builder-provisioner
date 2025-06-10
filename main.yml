@@ -2,6 +2,7 @@
 
 - name: "Run the provisioner_pre role against the inventory defined provisioner"
   hosts: provisioner
+  remote_user: "{{ rhis_user }}"
   become: true
   gather_facts: true
 
