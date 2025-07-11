@@ -60,7 +60,7 @@ environment_hosts:
     ip: "192.168.140.36"
 
 rhis_repo_path: "~/rhis/"
-my_git_username: "{{ git_configs['user.name'].value }}"
+my_git_username: "parmstro"
 rhis_git_repos:
   - name: "rhis-builder-idm"
     url: "https://github.com/{{ my_git_username }}/rhis-builder-idm.git"
