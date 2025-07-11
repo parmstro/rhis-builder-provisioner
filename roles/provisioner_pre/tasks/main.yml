@@ -29,5 +29,5 @@
   ansible.builtin.include_tasks: "ensure_host_entries.yml"
 
 - name: "Ensure git configuration on remote"
-  when: rhis_git_repos is definedf and (rhis_git_repos | length) > 0
+  when: rhis_git_repos is defined and (rhis_git_repos | length) > 0
   ansible.builtin.include_tasks: "ensure_git_config.yml"
