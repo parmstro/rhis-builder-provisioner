@@ -26,8 +26,7 @@
     group: root
 
 - name: "Ensure the automation hub token is refreshed."
-  when: automation_hub_token_refresh_cmd_vault is defined
-  ansible.builtin.command: "{{ automation_hub_token_refresh_cmd_vault }}"
+  ansible.builtin.command: "{{ rhah_refresh_token_cmd }}"
   register: refresh_token_result
   changed_when: refresh_token_result.rc == 0
 

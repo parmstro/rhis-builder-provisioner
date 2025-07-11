@@ -16,6 +16,7 @@ rpm_requirements_list:
 # we will back it up with the current iso8601basic datetimestamp
 # provisioner galaxy configuration
 rhah_refresh_token: "{{ redhat_automation_hub_token_vault }}"
+rhah_refresh_token_cmd: "{{ automation_hub_refresh_token_cmd_vault }}"
 
 # This helps us when dealing with the git repositories for rhis-builder-*
 git_configs:
