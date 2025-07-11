@@ -24,3 +24,4 @@ idm_activation_key_vault: "{{ default_activation_key_vault }}"
 # string - the automation hub refresh token
 # we assign this to the rhah_refresh_token variable
 redhat_automation_hub_refresh_token_vault: "eyJhbG....somebiglongstring" # not_secret
+automation_hub_refresh_token_cmd_vault: "put the command from the refresh token page here"
