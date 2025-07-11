@@ -1,6 +1,12 @@
 ---
 
+- name: "Copy the requirements file to the provisioner"
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/requirements.txt"
+    dest: "requirements.txt"
+    mode: "0644"
+
 - name: "Ensure required python modules are available"
-  ansible.builtin.command: "pip3 install -r {{ playbook_dir }}/requirements.txt"
+  ansible.builtin.command: "pip3 install -r requirements.txt"
   register: pip_install_result
   changed_when: pip_install_result.rc == 0
