@@ -2,7 +2,7 @@
 
 - name: "Ensure the remote directory exists"
   ansible.builtin.file:
-    path: "{{ remote_path }}"
+    path: "{{ vault_file_remote_path }}"
     state: "directory"
     mode: "0700"
     owner: "{{ rhis_user }}"
@@ -11,7 +11,7 @@
 - name: "Copy the files to remote host"
   ansible.builtin.copy:
     src: "{{ vault_file }}"
-    dest: "{{ remote_path }}/"
+    dest: "{{ vault_file_remote_path }}/"
     mode: "0600"
     owner: "{{ rhis_user }}"
     group: "{{ rhis_user }}"
