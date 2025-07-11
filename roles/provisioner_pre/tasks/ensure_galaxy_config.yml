@@ -1,84 +1,34 @@
 ---
 
-# Parsing the remote ini file is a pain.
-# Lets copy the file locally to a temporary location and use lookup.
-# If it looks good proceed, if not warn the user to check the provisioner.
-
 # BugHunterCredit: Ben Blasco
 
-# Need to determine whether we are running on the provisioner or the users laptop
-# if on the provisioner, run local
-# if on your laptop, do not run local
+# Problem: Parsing and local/remote issues when trying to preserve ansible.cfg
+# are a total PITA. We eventually want to capture the provisioner configuration anyway. So...
 
-- name: "Define the temporary file"
-  ansible.builtin.set_fact:
-    config_path: "{{ playbook_dir }}/rhis-evaluate-ansible.cfg"
-
-- name: "Does the remote system have an ansible.cfg file?"
-  ansible.builtin.stat:
-    path: "/etc/ansible/ansible.cfg"
-  register: ansible_cfg_stat
-
-- name: "Fail of the ansible.cfg file doesn't exist."
-  when: not ansible_cfg_stat.stat.exists
-  ansible.builtin.fail:
-    msg: "The ansible configuration does not exist."
-
-- name: "Ensure there is no local evaluation file"
-  connection: local
-  ansible.builtin.file:
-    path: "{{ config_path }}"
-    state: "absent"
-
-- name: "Fetch the remote ansible config to evaluate it."
-  ansible.builtin.fetch:
+# Solution: We are simply going to force the ansible config on the provisioner.
+# If you want to ensure that you have everything in your ansible.cfg file that you need.
+# Update the roles/provisioner_pre/tasks/templates/ansible.cfg.j2 template
+- name: "Backup the ansible configuration on the provisioner"
+  ansible.builtin.copy:
     src: "/etc/ansible/ansible.cfg"
-    dest: "{{ config_path }}"
-    flat: true
+    dest: "/etc/ansible/ansible.cfg.{{ ansible_date_time.iso8601_basic }}.bkp"
+    mode: "0644"
+    owner: root
+    group: root
+    remote_src: true
 
-- name: "Fetch the remote ansible config to evaluate it."
-  connection: local
-  ansible.builtin.wait_for:
-    path: "{{ config_path }}"
-    state: present
-    timeout: 30
+- name: "Create the rhis-builder ansible configuration on the provisioner"
+  ansible.builtin.template:
+    src: "ansible.cfg.j2"
+    dest: "/etc/ansible/ansible.cfg"
+    mode: "0644"
+    owner: root
+    group: root
 
-# Lookup always evaluates on the machine where playbook execution is launched
-- name: "Determine if the [galaxy] section exists"
-  connection: local
-  ansible.builtin.command: "cat {{ config_path }}"
-  register: ansible_cfg
-  changed_when: true
+- name: "Ensure the automation hub token is refreshed."
+  when: automation_hub_token_refresh_cmd_vault is defined
+  ansible.builtin.command: "{{ automation_hub_token_refresh_cmd_vault }}"
+  register: refresh_token_result
+  changed_when: refresh_token_result.rc == 0
 
-- name: "Get the list of galaxy server entries"
-  when: ansible_cfg.stdout.find('[galaxy]') != -1  # python find returns -1 when the string is not found or the index.
-  block:
-
-    - name: "Get the server list"
-      ansible.builtin.set_fact:
-        server_list: "{{ lookup('ansible.builtin.ini', 'server_list', section='galaxy', file=config_path) | split(',') | trim }}"
-
-    - name: "Get the list of urls for the entries"
-      ansible.builtin.set_fact:
-        urls: "{{ urls | default([]) + [lookup('ansible.builtin.ini', 'url', section='galaxy_server.' + section_name, file=config_path)] }}"
-      loop: "{{ server_list }}"
-      loop_control:
-        loop_var: section_name
-
-    - name: "Assert that the automation hub url is in the list"
-      ansible.builtin.assert:
-        that: rhah_url in urls
-        fail_msg: "Could not find automation hub url. Please check ansible.cfg on the remote machine."
-
-  always:
-
-    - name: "Clean up"
-      connection: local
-      ansible.builtin.file:
-        path: "{{ config_path }}"
-        state: "absent"
-
-- name: "Fail if no galaxy section is found."
-  when: ansible_cfg.stdout.find('[galaxy]') == -1
-  ansible.builtin.fail:
-    msg: "No galaxy section was found. Please create a proper galaxy section in your ansible.cfg file."
+# Much, much cleaner, simpler and maintainable for everyone. :-)

@@ -4,8 +4,9 @@
 - name: "Ensure ssh key"
   ansible.builtin.include_tasks: "ensure_ssh_user.yml"
 
-- name: "Ensure rpm dependencies"
-  ansible.builtin.include_tasks: "ensure_deps.yml"
+- name: "Ensure rpm requirements"
+  when: rpm_requirements_list is defined and (rpm_requirements_list | length) > 0
+  ansible.builtin.include_tasks: "ensure_rpm_requirements.yml"
 
 - name: "Ensure galaxy configruation"
   ansible.builtin.include_tasks: "ensure_galaxy_config.yml"
@@ -14,7 +15,7 @@
   ansible.builtin.include_tasks: "ensure_rhis_collections.yml"
 
 - name: "Ensure rhis-builder git repositories"
-  ansible.builtin.include_tasks: "ensure_rhis_repos.yml"
+  ansible.builtin.include_tasks: "ensure_rhis_git_repos.yml"
 
 - name: "Ensure rhis-builder python requirements"
   ansible.builtin.include_tasks: "ensure_python_requirements.yml"
@@ -24,10 +25,9 @@
   ansible.builtin.include_tasks: "ensure_vault_files.yml"
 
 - name: "Create bootstrap hosts name resolution entries"
+  when: environment_hosts is defined and (environment_hosts | length) > 0
   ansible.builtin.include_tasks: "ensure_host_entries.yml"
 
-- name: "Copy local vault files to remote"
-  ansible.builtin.include_tasks: "ensure_vault_files.yml"
-
 - name: "Ensure git configuration on remote"
+  when: rhis_git_repos is definedf and (rhis_git_repos | length) > 0
   ansible.builtin.include_tasks: "ensure_git_config.yml"

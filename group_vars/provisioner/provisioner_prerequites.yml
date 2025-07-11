@@ -1,10 +1,23 @@
 ---
 
-cdn_organization: "{{ cdn_organization_vault }}"
-cdn_activation_key: "{{ cdn_activation_key_vault }}"
-# Base network info
-_default_domain: "example.ca"
+# The rpm requirements for rhis-builder-provisioner
+rpm_requirements_list:
+  - ansible-core
+  - git
+  - vim
+  - rhel-system-roles
+  - python3
+  - python3-ipalib
+  - python3-jmespath
+  - python3-pip
+  - bind-utils
 
+# WARNING: WE *WILL* OVERWRITE /etc/ansible/ansible.cfg
+# we will back it up with the current iso8601basic datetimestamp
+# provisioner galaxy configuration
+rhah_refresh_token: "{{ redhat_automation_hub_token_vault }}"
+
+# This helps us when dealing with the git repositories for rhis-builder-*
 git_configs:
   - name: "user.name"
     scope: "global"
@@ -13,6 +26,15 @@ git_configs:
     scope: "global"
     value: "parmstro@redhat.com"
 
+# Use this value to provide a default domain name
+# for network variables that use the domain
+# it simplifies updates for environment
+# alternately, you can override in the domain in individual variables.
+_default_domain: "example.ca"
+
+# If we are starting from zero and do not have DNS configured yet. e.g. IdM will be our DNS
+# We use these values to update the local /etc/hosts file on the provisioner, idm and satellite
+# bootstrap systems so that we have basic name resolution for the bootstrap process
 environment_hosts:
   - name: "provisioner.{{ _default_domain }}"
     ip: "192.168.140.13"
@@ -20,6 +42,9 @@ environment_hosts:
     ip: "192.168.140.5"
   - name: "satellite.{{ _default_domain }}"
     ip: "192.168.140.12"
+
+  # You can extend this e.g. if you want to add your VMware environment
+  # Development environment subnet
   - name: "vcenter.{{ _default_domain }}"
     ip: "192.168.140.30"
   - name: "c3esx2.{{ _default_domain }}"
@@ -33,36 +58,8 @@ environment_hosts:
   - name: "c3esx6.{{ _default_domain }}"
     ip: "192.168.140.36"
 
-ssh_key_cipher: "ed25519"
-ssh_key_file_path: "~/.ssh/id_ed25519"
-ssh_public_key_path: "~/.ssh/id_ed25519.pub"
-
-rhah_url: "https://cloud.redhat.com/api/automation-hub/"
-
-rpm_dep_list:
-  - ansible-core
-  - git
-  - vim
-  - rhel-system-roles
-  - python3
-  - python3-ipalib
-  - python3-jmespath
-  - python3-pip
-  - bind-utils
-
-rhis_provisioner_python_modules:
-  - ansible-lint
-
-ansible_galaxy_server_list:
-  - name: "galaxy_root"
-    url: "https://galaxy.ansible.com"
-  - name: "automation_hub"
-    url: "https://cloud.redhat.com/api/automation-hub/"
-    auth_url: "https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token"
-    token: "{{ redhat_automation_hub_token_vault }}"
-
 rhis_repo_path: "~/rhis/"
-my_git_username: "<YourGitUserNameHere>"
+my_git_username: "{{ git_configs['user.name'].value }}"
 rhis_git_repos:
   - name: "rhis-builder-idm"
     url: "https://github.com/{{ my_git_username }}/rhis-builder-idm.git"

@@ -1,0 +1,11 @@
+---
+
+- name: "Register to the CDN"
+  community.general.redhat_subscription:
+    org_id: "{{ default_organization_id }}"
+    activationkey: "{{ provisioner_activation_key }}"
+
+- name: "Install rhis rpm requirements"
+  ansible.builtin.package:
+    name: "{{ rpm_requirements_list }}"
+    state: present

@@ -1,5 +1,6 @@
 # Python module requirements.
 
+ansible-lint  # required for linting projects
 fqdn     # required by idm_pre
 gssapi   # required by redhat.rhel_idm
 ipalib

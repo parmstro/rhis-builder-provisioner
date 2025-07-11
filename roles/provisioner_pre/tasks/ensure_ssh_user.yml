@@ -1,54 +1,79 @@
 ---
 
-- name: "Examine the public key path"
-  connection: local
-  ansible.builtin.stat:
-    path: "{{ ssh_public_key_path }}"
-  register: stat_result
-  become: false
+- name: "Evaluate ssh capability to the provisioner node"
+  block:
 
-- name: "Ensure the key exists"
-  when: not stat_result.stat.exists
-  connection: local
-  ansible.builtin.command: 'ssh-keygen -t {{ ssh_key_cipher }} -f {{ ssh_key_file_path }} -q -N ""'
-  become: false
-  register: ssh_key_gen_result
-  changed_when: ssh_key_gen_result.rc == 0
+    - name: "Try to ssh as the rhis-builder user - {{ rhis_user }}"
+      ansible.builtin.command: "ssh {{ rhis_user }}@{{ ansible_fqdn }} -o StrictHostKeyChecking=accept-new 'echo Killroy_was_here'"
+      register: result
+      changed_when: result.rc == 0
+      become: false
 
-- name: "Ensure the remote directory exists"
-  ansible.builtin.file:
-    path: "~/.ssh"
-    state: "directory"
-    mode: "0700"
-  become: false
+    - name: "Assert we were there"
+      ansible.builtin.assert:
+        that: result.stdout == "Killroy_was_here"
+      become: false
 
-- name: "Copy the private key to the provisioner node"
-  ansible.builtin.copy:
-    src: "{{ ssh_key_file_path }}"
-    dest: "{{ ssh_key_file_path }}"
-    mode: "0700"
-  become: false
+  rescue:
+    - name: "Unable to ssh as rhis-builder user - configuring ssh access"
+      ansible.builtin.debug:
+        var: result
 
-- name: "Copy the public key to the provisioner node"
-  ansible.builtin.copy:
-    src: "{{ ssh_public_key_path }}"
-    dest: "{{ ssh_public_key_path }}"
-    mode: "0744"
-  become: false
+    - name: "Examine the public key path"
+      connection: local
+      ansible.builtin.stat:
+        path: "{{ ssh_public_key_path }}"
+      register: stat_result
+      become: false
 
-- name: "Ensure passwordless ssh to host"
-  ansible.builtin.shell: "cat {{ ssh_public_key_path }} > ~/.ssh/authorized_keys"
-  become: false
-  register: authorized_key_result
-  changed_when: authorized_key_result.rc == 0
+    - name: "If necessary generate a new key"
+      when: not stat_result.stat.exists
+      connection: local
+      ansible.builtin.command: 'ssh-keygen -t {{ ssh_key_cipher }} -f {{ ssh_key_file_path }} -q -N ""'
+      become: false
+      register: ssh_key_gen_result
+      changed_when: ssh_key_gen_result.rc == 0
 
-- name: "Test the connection"
-  ansible.builtin.command: "ssh {{ ansible_fqdn }} -o StrictHostKeyChecking=accept-new 'echo Killroy_was_here'"
-  register: result
-  changed_when: result.rc == 0
-  become: false
+    - name: "Ensure the remote directory exists for {{ rhis_user }}"
+      ansible.builtin.file:
+        path: "~/.ssh"
+        state: "directory"
+        mode: "0700"
+      become: false
 
-- name: "Assert we were there"
-  ansible.builtin.assert:
-    that: result.stdout == "Killroy_was_here"
-  become: false
+    - name: "Copy the private key to the provisioner node"
+      ansible.builtin.copy:
+        src: "{{ ssh_key_file_path }}"
+        dest: "{{ ssh_key_file_path }}"
+        mode: "0700"
+      become: false
+
+    - name: "Copy the public key to the provisioner node"
+      ansible.builtin.copy:
+        src: "{{ ssh_public_key_path }}"
+        dest: "{{ ssh_public_key_path }}"
+        mode: "0744"
+      become: false
+
+    - name: "Ensure passwordless ssh to host"
+      ansible.builtin.shell: "cat {{ ssh_public_key_path }} > ~/.ssh/authorized_keys"
+      become: false
+      register: authorized_key_result
+      changed_when: authorized_key_result.rc == 0
+
+    - name: "Test the connection"
+      ansible.builtin.command: "ssh {{ ansible_fqdn }} -o StrictHostKeyChecking=accept-new 'echo Killroy_was_here'"
+      register: result
+      changed_when: result.rc == 0
+      become: false
+
+    - name: "Try to ssh as the rhis-builder user - {{ rhis_user }}"
+      ansible.builtin.command: "ssh {{ rhis_user }}@{{ ansible_fqdn }} -o StrictHostKeyChecking=accept-new 'echo Killroy_was_here'"
+      register: result
+      changed_when: result.rc == 0
+      become: false
+
+    - name: "Assert we were there"
+      ansible.builtin.assert:
+        that: result.stdout == "Killroy_was_here"
+      become: false

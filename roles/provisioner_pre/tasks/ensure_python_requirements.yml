@@ -1,10 +1,6 @@
 ---
 
 - name: "Ensure required python modules are available"
-  when: rhis_provisioner_python_modules is defined and (rhis_provisioner_python_modules | length) > 0
-  ansible.builtin.command: "pip3 install {{ module }}"
-  loop: "{{ rhis_provisioner_python_modules }}"
-  loop_control:
-    loop_var: module
-  register: lint_install_result
-  changed_when: lint_install_result.rc == 0
+  ansible.builtin.command: "pip3 install -r {{ playbook_dir }}/requirements.txt"
+  register: pip_install_result
+  changed_when: pip_install_result.rc == 0

@@ -1,0 +1,26 @@
+---
+
+# Effective 2025-07-31
+# This file has the minimum required variables to install the provisioner node and a satellite node
+
+# In order of use starting with rhis-builder-provisioner
+
+# Required for rhis-builder-provisioner
+
+# string - the organization id of the org you are registering to. You find it in your console.redhat.com profile
+default_organization_id_vault: "123456"
+
+# a string - the name of the activation key
+# NOTE: with SCA in effect, we have access to all repos enabled by our subscriptions
+# we don't necessarily need to have specific AKs for each CDN registered host
+# rhis-builder-* prerequisite roles enable all the appropriate repos
+default_activation_key_vault: "build_control"
+
+# in code we allow for separate activation keys so you can override the default above.
+provisioner_activation_key_vault: "{{ default_activation_key_vault }}"
+satellite_activation_key_vault: "{{ default_activation_key_vault }}"
+idm_activation_key_vault: "{{ default_activation_key_vault }}"
+
+# string - the automation hub refresh token
+# we assign this to the rhah_refresh_token variable
+redhat_automation_hub_refresh_token_vault: "eyJhbG....somebiglongstring" # not_secret
