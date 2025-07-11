@@ -19,4 +19,3 @@ collections:
   - name: "redhat.rhel_system_roles"
   - name: "redhat.satellite"
   - name: "redhat.satellite_operations"
-
