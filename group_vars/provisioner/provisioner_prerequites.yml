@@ -22,7 +22,7 @@ rhah_refresh_token_cmd: "{{ automation_hub_refresh_token_cmd_vault }}"
 git_configs:
   - name: "user.name"
     scope: "global"
-    value: "parmstro@redhat.com"
+    value: "parmstro"
   - name: "user.email"
     scope: "global"
     value: "parmstro@redhat.com"
@@ -60,7 +60,7 @@ environment_hosts:
     ip: "192.168.140.36"
 
 rhis_repo_path: "~/rhis/"
-my_git_username: "parmstro"
+my_git_username: "{{ git_configs[0].value }}"
 rhis_git_repos:
   - name: "rhis-builder-idm"
     url: "https://github.com/{{ my_git_username }}/rhis-builder-idm.git"
@@ -86,3 +86,5 @@ rhis_git_repos:
   - name: "rhis-builder-imagebuilder"
     url: "https://github.com/{{ my_git_username }}/rhis-builder-imagebuilder.git"
     force: true
+
+vault_file_remote_path: "~/.ansible/vault"
