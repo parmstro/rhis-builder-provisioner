@@ -1,6 +1,10 @@
 # rhis-builder-provisioner
 
-Fork it. Clone it. Configure it. Test it. Change it. Commit it. Create a PR.
+Use the container!
+
+In an effort to streamline building and using an RHIS environment, we have moved provisioner into a container. This has resulted in consumers getting to a working environment **way** faster. The rhis-provisioner-9 container build is based on RHEL UBI 9 and has all of the code dependencies and all of the ansible code for all of the rhis-builder projects baked in, plus has the example.ca sample configuration for the whole environment. We are working to make "Life is Better with RHIS" a reality. 
+
+You will soon be able to pull the rhis-provisioner-9 container from an official Red Hat repository. In the meantime please request access to the rhis-provisioner-container repository to build your own container.
 
 ***
 
@@ -10,24 +14,20 @@ I know that most of you have experience with these things, but we also work with
 If you haven't been there yet, please visit the [rhis-builder-provisioner wiki](https://github.com/parmstro/rhis-builder-provisioner/wiki) first
 
 See rhis-builder-vault-SAMPLE repo for secrets definitions.
-***
-This repository contains the code that configures the host that will provision an rhis infrastructure. 
-There are really two ways to approach provisioning the rhis environment. 
-1) Create a workstation, or other node, that has ansible core and the related collections necessary to run our projects. (Like deploying Openshift)
-2) Create an aap all-in-one server that we can synchronize all the projects to and create the necessary workflows to build the rhis. This AAP server will (Like creating an under-cloud a la Openstack)
-
-We will initially pursue method 1 as this is the simplest. At a future date we will investigate 2 as we need to control the integrated deployment using workflows.
-
-### Limitations
-- today this supports and is tested on an enterprise linux host (happy to accept pull requests supporting MacOS or other systems as the provisioner)
-- Deployment is on RHEL9
 
 ## What you will need at a minimum:
 - a plan! What sort of environment do you want to build? For a sample - example.ca - see the wiki
-- a node to serve as the provisioner (virtual or baremetal)
+VMs, Baremetal or cloud instances for:
+- a node to run the rhis-provisioner-9 container
 - a node for identity management
 - a node for satellite
-  and
-- more baremetal nodes, or a supported hypervisor environment, or a supported cloud environment to build out the rest of your architecture
+
+That gets you off the ground, to get flying you will need:
+- more baremetal nodes, or 
+- a supported hypervisor environment, or 
+- a supported cloud environment, or 
+- all of the above
+
+to build out the rest of your architecture
 
 ## See the [Wiki for Instructions on getting started](https://github.com/parmstro/rhis-builder-provisioner/wiki)
