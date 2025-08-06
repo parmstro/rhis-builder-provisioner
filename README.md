@@ -7,6 +7,8 @@ In an effort to streamline building and using an RHIS environment, we have moved
 
 You will soon be able to pull the rhis-provisioner-9 container from an official Red Hat repository. In the meantime please access to the [rhis-provisioner-container](https://github.com/parmstro/rhis-provisioner-container) repository to build a container from source.
 
+There is still a small bit of work to get the provisioner ready to deploy the rhis environment.
+This project is still valuable to set up the inventory project, git variables and local hosts entries to make it easier to run the container mode.
 
 ***
 
