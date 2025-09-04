@@ -2,13 +2,13 @@
 
 # The rpm requirements for rhis-builder-provisioner
 rpm_requirements_list:
-  - ansible-core
-  - git
-  - vim
-  - container-management
-  - python3-pip
-  - bind-utils
-  - iputils
+  - "ansible-core"
+  - "git"
+  - "vim"
+  - "@container-management"
+  - "python3-pip"
+  - "bind-utils"
+  - "iputils"
 
 # WARNING: WE *WILL* OVERWRITE /etc/ansible/ansible.cfg
 # we will back it up with the current iso8601basic datetimestamp
@@ -30,40 +30,41 @@ git_configs:
 # it simplifies updates for environment
 # alternately, you can override in the domain in individual variables.
 _default_domain: "example.ca"
+_default_network: "192.168.140"
 
 # If we are starting from zero and do not have DNS configured yet. e.g. IdM will be our DNS
 # We use these values to update the local /etc/hosts file on the provisioner, idm and satellite
 # bootstrap systems so that we have basic name resolution for the bootstrap process
 environment_hosts:
   - name: "provisioner.{{ _default_domain }}"
-    ip: "192.168.140.13"
-  - name: "idm.{{ _default_domain }}"
-    ip: "192.168.140.5"
-  - name: "satellite.{{ _default_domain }}"
-    ip: "192.168.140.12"
+    ip: "{{ _default_network }}.13"
+  - name: "idm1.{{ _default_domain }}"
+    ip: "{{ _default_network }}.5"
+  - name: "satellite1.{{ _default_domain }}"
+    ip: "{{ _default_network }}.12"
 
   # You can extend this e.g. if you want to add your VMware environment
   # Development environment subnet
   - name: "vcenter.{{ _default_domain }}"
-    ip: "192.168.140.30"
-  - name: "c3esx2.{{ _default_domain }}"
-    ip: "192.168.140.32"
-  - name: "c3esx3.{{ _default_domain }}"
-    ip: "192.168.140.33"
-  - name: "c3esx4.{{ _default_domain }}"
-    ip: "192.168.140.34"
-  - name: "c3esx5.{{ _default_domain }}"
-    ip: "192.168.140.35"
-  - name: "c3esx6.{{ _default_domain }}"
-    ip: "192.168.140.36"
+    ip: "{{ _default_network }}.30"
+  - name: "esx2.{{ _default_domain }}"
+    ip: "{{ _default_network }}.32"
+  - name: "esx3.{{ _default_domain }}"
+    ip: "{{ _default_network }}.33"
+  - name: "esx4.{{ _default_domain }}"
+    ip: "{{ _default_network }}.34"
+  - name: "esx5.{{ _default_domain }}"
+    ip: "{{ _default_network }}.35"
+  - name: "esx6.{{ _default_domain }}"
+    ip: "{{ _default_network }}.36"
 
 rhis_repo_path: "~/rhis/"
 my_git_username: "{{ git_configs[0].value }}"
 rhis_git_repos:
-  - name: "rhis-builder-idm"
-    url: "https://github.com/{{ my_git_username }}/rhis-builder-inventory.git"
+  - name: "rhis-builder-inventory"
+    url: "https://github.com/{{ my_git_username }}/rhis-builder-inventory.git"   # you will want to change this to a private repository
     force: true
-  - name: "rhis-builder-satellite"
+  - name: "rhis-provisioner-container"
     url: "https://github.com/{{ my_git_username }}/rhis-provisioner-container.git"
     force: true
 
